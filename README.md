@@ -5,7 +5,23 @@
 https://github.com/vollcheck/watchy/blob/master/main.py#L123
 
 ```python
+# Global observer instance
 observer: Optional[Observer] = None
+
+
+def start_filesystem_monitor():
+    """Start watchdog observer in a separate thread"""
+    global observer
+
+    # Ensure watch directory exists
+    watch_path = Path(WATCH_DIRECTORY)
+    watch_path.mkdir(parents=True, exist_ok=True)
+
+    event_handler = FootageEventHandler()
+    observer = Observer()
+    observer.schedule(event_handler, str(watch_path), recursive=True)
+    observer.start()
+    print(f"Watching directory: {watch_path.absolute()}")
 ```
 
 2. Inherit from Event Handler for file system events
@@ -42,4 +58,26 @@ Directory created: footage/df215d4f-fa6e-427a-981a-2218f66707a7/ec8168ce-2f62-4e
 Tracked: footage/df215d4f-fa6e-427a-981a-2218f66707a7/ec8168ce-2f62-4e9f-9f6f-613363ae6036 (type: directory)
 File created: footage/df215d4f-fa6e-427a-981a-2218f66707a7/ec8168ce-2f62-4e9f-9f6f-613363ae6036/frame0.blk
 Tracked: footage/df215d4f-fa6e-427a-981a-2218f66707a7/ec8168ce-2f62-4e9f-9f6f-613363ae6036/frame0.blk (type: video)
+```
+
+
+# Stats
+
+```bash
+curl -X 'GET' \
+  'http://localhost:8000/stats' \
+  -H 'accept: application/json'
+```
+
+```json
+{
+  "total_files": 1,
+  "total_directories": 2,
+  "processed_files": 1,
+  "unprocessed_files": 0,
+  "by_type": {
+    "other": 1
+  },
+  "total_size_mb": 0
+}
 ```
