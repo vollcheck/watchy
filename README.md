@@ -4,7 +4,7 @@
 
 https://github.com/vollcheck/watchy/blob/master/main.py#L123
 
-```
+```python
 observer: Optional[Observer] = None
 ```
 
@@ -12,7 +12,7 @@ observer: Optional[Observer] = None
 
 https://github.com/vollcheck/watchy/blob/master/main.py#L101
 
-```
+```python
 class FootageEventHandler(FileSystemEventHandler):
     """Watchdog event handler for filesystem monitoring"""
 
